@@ -2,7 +2,6 @@ import { UploadDropzone } from "@/lib/uploadthing";
 import "@uploadthing/react/styles.css";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { Button } from "./ui/button";
 import { toast } from "sonner";
 
 interface FileUploadProps {
@@ -45,7 +44,7 @@ const FileUpload = ({
             className="w-full rounded-md"
           />
           <X
-            className="h-9 cursor-pointer rounded-md px-3 bg-destructive text-destructive-foreground hover:bg-destructive/90 absolute top-0 right-0"
+            className="h-9 w-9 cursor-pointer rounded-md  bg-destructive text-destructive-foreground hover:bg-destructive/90 absolute top-0 right-0"
             onClick={() => {
               onChange("");
             }}
@@ -62,7 +61,7 @@ const FileUpload = ({
             className="w-full rounded-md"
           />
           <X
-            className="h-9 cursor-pointer rounded-md px-3 bg-destructive text-destructive-foreground hover:bg-destructive/90 absolute top-0 right-0"
+            className="h-9 w-9 cursor-pointer rounded-md  bg-destructive text-destructive-foreground hover:bg-destructive/90 absolute top-0 right-0"
             onClick={() => {
               onChange("");
             }}

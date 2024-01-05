@@ -12,7 +12,6 @@ import FormInput from "../form/form-input";
 import FormButton from "../form/form-button";
 import FormSelect from "../form/form-select";
 import { useAction } from "@/hook/use-action";
-import { createBook } from "@/actions/create-book";
 import { toast } from "sonner";
 import FileUpload from "../file-upload";
 import { useEffect, useState } from "react";
@@ -21,9 +20,16 @@ import { editBook } from "@/actions/edit-book";
 const EditBookModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const { contentOwners, publishers, book, contentOwner, publisher } = data;
-  const isModalOpen = isOpen && type === "editBook";
 
-  const [image, setImage] = useState<string | undefined>("");
+  const isModalOpen = isOpen && type === "editBook";
+  const imageUrl = book?.cover_photo ?? "";
+
+  const [image, setImage] = useState<string | undefined>();
+
+  useEffect(() => {
+    // Set the image state after imageUrl is retrieved
+    setImage(imageUrl);
+  }, [imageUrl]); //
 
   const { fieldsErrors, execute, isLoading } = useAction(editBook, {
     onSuccess: (data) => {
@@ -59,6 +65,7 @@ const EditBookModal = () => {
 
   useEffect(() => {
     setIsMounted(true);
+    setImage(book?.cover_photo!);
   }, []);
 
   //prevent hydration
@@ -119,8 +126,9 @@ const EditBookModal = () => {
             <FileUpload
               endpoint="imageUpload"
               value={image}
-              defaultValue={book?.cover_photo!}
-              onChange={(e) => setImage(e)}
+              onChange={(e) => {
+                setImage(e);
+              }}
             />
           </div>
           <input type="hidden" name="idx" value={book?.idx} />
