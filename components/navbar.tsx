@@ -18,7 +18,7 @@ const Navbar = ({ publishers, contentOwners }: NavbarProps) => {
   return (
     <header
       className={cn(
-        " bg-neutral-100 dark:bg-neutral-900 h-[10%] sm:h-[8%]  sticky top-0 w-full z-30"
+        " bg-neutral-100 dark:bg-neutral-900 h-[10%] sm:h-[8%]  sticky top-0 w-full z-30 opacity-95 border-b"
       )}
     >
       <nav className="py-4 px-8  md:px-20 flex justify-between items-center">
