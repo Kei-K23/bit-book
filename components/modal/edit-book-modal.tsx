@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { BookPlus, Loader2 } from "lucide-react";
+import { Edit, Loader2 } from "lucide-react";
 import { useModal } from "@/hook/use-modal-store";
 import FormInput from "../form/form-input";
 import FormButton from "../form/form-button";
@@ -15,16 +15,19 @@ import { useAction } from "@/hook/use-action";
 import { createBook } from "@/actions/create-book";
 import { toast } from "sonner";
 import FileUpload from "../file-upload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { editBook } from "@/actions/edit-book";
 
-const CreateBookModal = () => {
-  const [image, setImage] = useState<string | undefined>();
+const EditBookModal = () => {
   const { isOpen, onClose, type, data } = useModal();
-  const { contentOwners, publishers } = data;
-  const isModalOpen = isOpen && type === "createBook";
-  const { fieldsErrors, execute, isLoading } = useAction(createBook, {
+  const { contentOwners, publishers, book, contentOwner, publisher } = data;
+  const isModalOpen = isOpen && type === "editBook";
+
+  const [image, setImage] = useState<string | undefined>("");
+
+  const { fieldsErrors, execute, isLoading } = useAction(editBook, {
     onSuccess: (data) => {
-      toast.success(`Book "${data.bookname}" created`);
+      toast.success(`Book "${data.bookname}" edited`);
       onClose();
       setImage("");
     },
@@ -38,8 +41,29 @@ const CreateBookModal = () => {
     const co_id = parseInt(formData.get("co_id") as string, 10);
     const publisher_id = parseInt(formData.get("publisher_id") as string, 10);
     const price = parseInt(formData.get("price") as string, 10);
+    const idx = parseInt(formData.get("idx") as string, 10);
+    const book_uniq_idx = formData.get("book_uniq_idx") as string;
 
-    execute({ bookname, co_id, publisher_id, price, cover_photo: image });
+    execute({
+      bookname,
+      co_id,
+      publisher_id,
+      price,
+      cover_photo: image,
+      idx,
+      book_uniq_idx,
+    });
+  }
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  //prevent hydration
+  if (!isMounted) {
+    return null;
   }
 
   return (
@@ -47,8 +71,8 @@ const CreateBookModal = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-lg md:text-xl flex items-center gap-2 justify-center">
-            Create New Book
-            <BookPlus className="w-5 h-5 md:w-6 md:h-6 text-indigo-500" />
+            Editing the Book
+            <Edit className="w-5 h-5 md:w-6 md:h-6 text-indigo-500" />
           </DialogTitle>
         </DialogHeader>
         <form action={onSubmit} className="space-y-4">
@@ -58,6 +82,7 @@ const CreateBookModal = () => {
               label="Book Name:"
               placeholder="e.g Hello Next.js"
               errors={fieldsErrors}
+              defaultValue={book?.bookname}
             />
           </div>
           <div>
@@ -67,6 +92,7 @@ const CreateBookModal = () => {
               placeholder="e.g U Mg Mg"
               items={contentOwners}
               errors={fieldsErrors}
+              defaultValue={`${contentOwner?.idx}`}
             />
           </div>
           <div>
@@ -76,6 +102,7 @@ const CreateBookModal = () => {
               placeholder="e.g Myint"
               items={publishers}
               errors={fieldsErrors}
+              defaultValue={`${publisher?.idx}`}
             />
           </div>
           <div>
@@ -85,22 +112,30 @@ const CreateBookModal = () => {
               type="number"
               placeholder="e.g 111"
               errors={fieldsErrors}
+              defaultValue={`${book?.price}`}
             />
           </div>
           <div>
             <FileUpload
               endpoint="imageUpload"
               value={image}
+              defaultValue={book?.cover_photo!}
               onChange={(e) => setImage(e)}
             />
           </div>
+          <input type="hidden" name="idx" value={book?.idx} />
+          <input
+            type="hidden"
+            name="book_uniq_idx"
+            value={book?.book_uniq_idx}
+          />
           <FormButton disabled={isLoading} className="flex items-center gap-1">
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" /> Creating...
+                <Loader2 className="w-4 h-4 animate-spin" /> Saving...
               </>
             ) : (
-              <>Create</>
+              <>Save</>
             )}
           </FormButton>
         </form>
@@ -109,4 +144,4 @@ const CreateBookModal = () => {
   );
 };
 
-export default CreateBookModal;
+export default EditBookModal;

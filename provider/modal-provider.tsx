@@ -1,6 +1,7 @@
 "use client";
 import CreateBookModal from "@/components/modal/create-book-modal";
 import DeleteBookModal from "@/components/modal/delete-book-modal";
+import EditBookModal from "@/components/modal/edit-book-modal";
 import { useEffect, useState } from "react";
 
 const ModalProvider = () => {
@@ -18,6 +19,7 @@ const ModalProvider = () => {
     <>
       <CreateBookModal />
       <DeleteBookModal />
+      <EditBookModal />
     </>
   );
 };

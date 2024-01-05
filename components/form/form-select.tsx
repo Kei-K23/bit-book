@@ -57,7 +57,7 @@ const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>(
             onValueChange={(e) => {
               setValue(`${items?.[0].idx}`);
             }}
-            defaultValue={`${items?.[0].idx}`}
+            defaultValue={defaultValue}
           >
             <SelectTrigger
               disabled={pending || disabled}

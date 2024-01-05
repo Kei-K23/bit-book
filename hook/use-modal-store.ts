@@ -8,6 +8,8 @@ interface ModalData {
   book?: BookWithContentOwnerAndPublisher;
   publishers?: Publisher[] | null;
   contentOwners?: ContentOwner[] | null;
+  publisher?: Publisher | null;
+  contentOwner?: ContentOwner | null;
 }
 interface ModalStore {
   type: ModalType | null;
