@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ContentOwner {
+  idx  Int    @id @default(autoincrement())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  books     Book[]
+}
+
+model Publisher {
+  idx  Int    @id @default(autoincrement()) // Unique ID, auto-incremented
+  name String // Name of the publisher owner
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  books     Book[]
+}
+
+// Define the Book model
+model Book {
+  idx              Int      @id @default(autoincrement())
+  book_uniq_idx    String   @unique @default(uuid())
+  bookname         String // Name of the book
+  co_id            Int // Foreign key linked to ContentOwner table
+  publisher_id     Int // Foreign key linked to Publisher table
+  cover_photo      String? // Image URL of the book cover (optional)
+  created_timetick DateTime @default(now())
+  price            Int
+
+  // Establishing relationships with other tables
+  contentOwner ContentOwner @relation(fields: [co_id], references: [idx], onDelete: Cascade)
+  publisher    Publisher    @relation(fields: [publisher_id], references: [idx], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
