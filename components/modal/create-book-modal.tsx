@@ -14,8 +14,11 @@ import FormSelect from "../form/form-select";
 import { useAction } from "@/hook/use-action";
 import { createBook } from "@/actions/create-book";
 import { toast } from "sonner";
+import FileUpload from "../file-upload";
+import { ChangeEvent, useState } from "react";
 
 const CreateBookModal = () => {
+  const [image, setImage] = useState<string | undefined>();
   const { isOpen, onClose, type, data } = useModal();
   const { contentOwners, publishers } = data;
   const isModalOpen = isOpen && type === "createBook";
@@ -23,6 +26,7 @@ const CreateBookModal = () => {
     onSuccess: (data) => {
       toast.success(`Book "${data.bookname}" created`);
       onClose();
+      setImage("");
     },
     onError: (error) => {
       toast.error(error);
@@ -35,8 +39,16 @@ const CreateBookModal = () => {
     const publisher_id = parseInt(formData.get("publisher_id") as string, 10);
     const price = parseInt(formData.get("price") as string, 10);
 
-    execute({ bookname, co_id, publisher_id, price });
+    execute({ bookname, co_id, publisher_id, price, cover_photo: image });
   }
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const uploadedFile = event.target.files[0];
+      const uploadedImageUrl = URL.createObjectURL(uploadedFile);
+      setImage(uploadedImageUrl);
+    }
+  };
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -81,6 +93,13 @@ const CreateBookModal = () => {
               type="number"
               placeholder="e.g 111"
               errors={fieldsErrors}
+            />
+          </div>
+          <div>
+            <FileUpload
+              endpoint="imageUpload"
+              value={image}
+              onChange={(e) => setImage(e)}
             />
           </div>
           <FormButton disabled={isLoading} className="flex items-center gap-1">
