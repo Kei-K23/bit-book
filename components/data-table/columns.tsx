@@ -5,6 +5,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import Image from "next/image";
 import ActionCell from "./action-cell";
+import { Button } from "../ui/button";
+import { ArrowUpDown } from "lucide-react";
 
 export type BookWithContentOwnerAndPublisher = Book & {
   publisher: Publisher;
@@ -14,7 +16,17 @@ export type BookWithContentOwnerAndPublisher = Book & {
 export const columns: ColumnDef<BookWithContentOwnerAndPublisher>[] = [
   {
     accessorKey: "bookname",
-    header: () => <div className="font-semibold">Name</div>,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "cover_photo",
@@ -58,7 +70,19 @@ export const columns: ColumnDef<BookWithContentOwnerAndPublisher>[] = [
   },
   {
     accessorKey: "created_timetick",
-    header: () => <div className="font-semibold">Created TimeTick</div>,
+    // header: () => <div className="font-semibold">Created TimeTick</div>,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created TimeTick
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+
     cell: ({ row }) => {
       return (
         <div>

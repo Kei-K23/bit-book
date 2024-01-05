@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Book, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ActionTooltip from "./action-tooltip";
@@ -24,9 +24,24 @@ const Navbar = ({ publishers, contentOwners }: NavbarProps) => {
       <nav className="py-4 px-8  md:px-20 flex justify-between items-center">
         <Link href={"/"} className="flex justify-between items-center gap-1">
           <Book className="w-5 h-5 text-blue-500" />
-          <span className="underline font-bold text-lg">BIT-Book</span>
+          <span className="underline font-bold text-base md:text-lg">
+            BIT-Book
+          </span>
         </Link>
         <div className="flex items-center gap-10">
+          <ActionTooltip title="Get Book list JSON API">
+            <Link
+              href={"/api/books"}
+              className={cn(
+                "flex items-center gap-x-1",
+                buttonVariants({ variant: "link" })
+              )}
+            >
+              <Book className="w-5 h-5" />
+              <span className="hidden md:block">Get Book list JSON api</span>
+            </Link>
+          </ActionTooltip>
+
           <ActionTooltip title="Create New Book">
             <Button
               className="flex items-center gap-x-1"

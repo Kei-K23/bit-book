@@ -2,10 +2,14 @@
 
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getFilteredRowModel,
   useReactTable,
+  getSortedRowModel,
+  ColumnFiltersState,
 } from "@tanstack/react-table";
 
 import {
@@ -18,6 +22,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -29,12 +34,22 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [isMounted, setIsMounted] = useState(false);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
   });
 
   useEffect(() => {
@@ -47,8 +62,20 @@ export function DataTable<TData, TValue>({
   }
 
   return (
-    <div>
-      <div className="rounded-md border mx-6 md:mx-14 lg:mx-20 mt-10">
+    <div className="w-full">
+      <div className="flex items-center py-4 mx-6 md:mx-14 lg:mx-20 mt-5">
+        <Input
+          placeholder="Filter book name..."
+          value={
+            (table.getColumn("bookname")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("bookname")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
+      <div className="rounded-md border mx-6 md:mx-14 lg:mx-20">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
