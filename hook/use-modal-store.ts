@@ -1,10 +1,11 @@
-import { Book, ContentOwner, Publisher } from "@prisma/client";
+import { BookWithContentOwnerAndPublisher } from "@/components/data-table/columns";
+import { ContentOwner, Publisher } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType = "createBook" | "editBook" | "deleteBook";
 
 interface ModalData {
-  book?: Book;
+  book?: BookWithContentOwnerAndPublisher;
   publishers?: Publisher[] | null;
   contentOwners?: ContentOwner[] | null;
 }

@@ -7,7 +7,12 @@ export default async function Home() {
     orderBy: {
       created_timetick: "desc",
     },
+    include: {
+      contentOwner: true,
+      publisher: true,
+    },
   });
+
   return (
     <main>
       <DataTable columns={columns} data={books} />

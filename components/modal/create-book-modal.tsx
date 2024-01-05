@@ -42,14 +42,6 @@ const CreateBookModal = () => {
     execute({ bookname, co_id, publisher_id, price, cover_photo: image });
   }
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const uploadedFile = event.target.files[0];
-      const uploadedImageUrl = URL.createObjectURL(uploadedFile);
-      setImage(uploadedImageUrl);
-    }
-  };
-
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent>

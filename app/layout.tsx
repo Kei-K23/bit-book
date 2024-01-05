@@ -3,10 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import ModalProvider from "@/provider/modal-provider";
-import {
-  fetchAllContentOwner,
-  fetchAllPublisher,
-} from "@/lib/fetch-content-owner";
+import { fetchAllContentOwner, fetchAllPublisher } from "@/lib/fetch-data";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
